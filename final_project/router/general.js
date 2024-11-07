@@ -21,6 +21,8 @@ public_users.get('/isbn/:isbn',function (req, res) {
 
   if (isbn) {
     let book = books[isbn]
+
+    // Return book details if book by ISBN provided exists
     if (book) {
       return res.send(JSON.stringify(book, null, 4));
     } else {
