@@ -10,10 +10,6 @@ public_users.post("/register", (req,res) => {
   const password = req.body.password;
 
   if (username && password) {
-    // Filter the users array for any user with the same username
-    let usersWithSameName = users.filter((user) => {
-      return user.username === username;
-    });
 
     // If any user with the same username is found, return error
     if (!isValid(username)) {
