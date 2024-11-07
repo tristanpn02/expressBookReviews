@@ -16,7 +16,7 @@ public_users.post("/register", (req,res) => {
     });
 
     // If any user with the same username is found, return error
-    if (usersWithSameName.length > 0) {
+    if (!isValid(username)) {
       return res.status(406).json({message: "User already exists!"});
     } else {
       // Otherwise add new user
