@@ -40,7 +40,7 @@ public_users.get('/author/:author',function (req, res) {
 
   // Return array of books by author provided if they exist
   if (author) {
-    // Iterate through books array, check if author matches the one provided and add to authorsBooks
+    // Iterate through books array, check if author matches the one provided and add to booksByAuthor
     Object.keys(books).forEach((key, value) => {
       if (books[key].author === author) {
         booksByAuthor.push(books[key]);
