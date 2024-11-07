@@ -78,7 +78,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
       }
 
       // Append review to book under reviewer's username
-      book.reviews[reviewer] = {
+      book.reviews[Object.keys(book.reviews).length + 1] = {
         "reviewer": reviewer,
         "title": title,
         "body": body,
