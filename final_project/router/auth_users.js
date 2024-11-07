@@ -63,8 +63,33 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  const title = req.body.title;
+  const body = req.body.body;
+  const reviewer = req.session.authorization.username;
+
+  if (isbn) {
+    let book = books[isbn];
+
+    if (book) {
+      // Return error if title or body is missing
+      if (!title || !body) {
+        return res.status(406).json({message: "Title or body missing."})
+      }
+
+      // Append review to book under reviewer's username
+      book.reviews[reviewer] = {
+        "reviewer": reviewer,
+        "title": title,
+        "body": body,
+        "source": "Review submitted through application."
+      }
+
+      return res.status(200).send("Review successfully submitted!");
+    }
+    return res.status(404).json({message: `Book with ISBN ${isbn} not found.`});
+  }
+  return res.status(406).json({message: "No ISBN provided."});
 });
 
 module.exports.authenticated = regd_users;
