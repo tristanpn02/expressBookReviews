@@ -98,27 +98,35 @@ public_users.get('/author/:author',function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  let title = req.params.title;
-  let booksByTitle = []; // Array to be populated with books by title
+  new Promise((resolve, reject) => {
+    const title = req.params.title;
+    let booksByTitle = []; // Array to be populated with books by title
 
-  // Return array of books by title provided if they exist
-  if (title) {
-    // Iterate through books array, check if title matches the one provided and add to booksByTitle
-    Object.keys(books).forEach((key, value) => {
-      if (books[key].title === title) {
-        booksByTitle.push(books[key]);
-      }
-    })
-
-    // Check if books have been added to booksByTitle array
-    if (booksByTitle.length > 0) {
-      return res.send(JSON.stringify(booksByTitle, null, 4));
+    // Return array of books by title provided if they exist
+    if (!title) {
+      reject("No title provided");
     } else {
-      return res.status(404).json({message: `No books by title ${title} found.`})
+    // Iterate through books array, check if title matches the one provided and add to booksByTitle
+      Object.keys(books).forEach((key, value) => {
+        if (books[key].title === title) {
+          booksByTitle.push(books[key]);
+        }
+      });
+
+      // Check if books have been added to booksByTitle array
+      if (!(booksByTitle.length > 0)) {
+        reject(`No books with title ${title} found`);
+      } else {
+        resolve(JSON.stringify(booksByTitle, null, 4));
+      }
     }
-  } else {
-    return res.status(406).json({message: "Title not provided."})
-  }
+  })
+  .then((data) => {
+    res.status(200).send(data);
+  })
+  .catch((error) => {
+    res.status(404).json({message: error});
+  })
 });
 
 //  Get book review
